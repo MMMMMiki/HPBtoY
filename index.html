@@ -216,69 +216,6 @@ button.addEventListener("click", () => {
   message.classList.add("show");
 });
 
-// --- タップした場所をキラキラさせる演出 ---
-const sparkles = [];
-
-class Sparkle {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-    this.size = Math.random() * 3 + 2;
-    this.life = 1;
-    this.speedX = (Math.random() - 0.5) * 3;
-    this.speedY = (Math.random() - 0.5) * 3;
-    this.color = `hsl(${Math.random() * 360}, 100%, 70%)`;
-  }
-  update() {
-    this.x += this.speedX;
-    this.y += this.speedY;
-    this.life -= 0.02;
-  }
-  draw() {
-    ctx.globalAlpha = this.life;
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-    ctx.fillStyle = this.color;
-    ctx.fill();
-    ctx.globalAlpha = 1;
-  }
-}
-
-// sparkle生成
-function createSparkle(x, y) {
-  for (let i = 0; i < 15; i++) {
-    sparkles.push(new Sparkle(x, y));
-  }
-}
-
-// クリック・タップに対応
-canvas.addEventListener("click", (e) => {
-  createSparkle(e.clientX, e.clientY);
-});
-canvas.addEventListener("touchstart", (e) => {
-  const t = e.touches[0];
-  createSparkle(t.clientX, t.clientY);
-});
-
-// 既存のループにsparkle処理を統合
-const originalAnimate = animate;
-function animateWithSparkles() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  petals.forEach(p => { p.update(); p.draw(); });
-
-  // sparkle描画
-  for (let i = sparkles.length - 1; i >= 0; i--) {
-    const s = sparkles[i];
-    s.update();
-    s.draw();
-    if (s.life <= 0) sparkles.splice(i, 1);
-  }
-
-  requestAnimationFrame(animateWithSparkles);
-}
-requestAnimationFrame(animateWithSparkles);
-
-
 </script>
 </body>
 </html>
