@@ -128,7 +128,7 @@
 </style>
 </head>
 <body>
-<audio src="cigarette.mp3" autoplay loop></audio>
+<audio id="bgm" src="cigarette.mp3" autoplay loop></audio>
 <canvas id="canvas"></canvas>
 
 <div class="content">
@@ -143,19 +143,6 @@
 </div>
 
 <script>
-
-button.addEventListener("click", () => {
-  const wish = input.value.trim();
-  if (!wish) return;
-  document.getElementById("bgm").play(); // ★ ここ追加！
-  section.style.opacity = "0";
-  setTimeout(() => (section.style.display = "none"), 1000);
-  character.src = "yumehara.png";
-  character.classList.add("show");
-  message.textContent = `"${wish}" いいね、けってーい！`;
-  message.classList.add("show");
-});
-  
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 canvas.width = innerWidth;
@@ -219,9 +206,11 @@ const message = document.getElementById("cheer-message");
 button.addEventListener("click", () => {
   const wish = input.value.trim();
   if (!wish) return;
+  const bgm = document.getElementById("bgm");
+  if (bgm.paused) bgm.play();
   section.style.opacity = "0";
   setTimeout(() => (section.style.display = "none"), 1000);
-  character.src = "yumehara.png"; // ←ここに好きな画像パス！
+  character.src = "yumehara.png";
   character.classList.add("show");
   message.textContent = `"${wish}" いいね、けってーい！`;
   message.classList.add("show");
