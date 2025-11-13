@@ -128,8 +128,6 @@
 </style>
 </head>
 <body>
-<audio id="bgm" src="cigarette.mp3" loop preload="auto"></audio>
-
 <canvas id="canvas"></canvas>
 
 <div class="content">
@@ -144,16 +142,16 @@
 </div>
 
 <script>
-document.addEventListener("click", () => {
-  document.getElementById("bgm").play();
-}, { once: true });
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
-canvas.width = innerWidth;
-canvas.height = innerHeight;
-window.addEventListener("resize", () => {
-  canvas.width = innerWidth;
-  canvas.height = innerHeight;
+button.addEventListener("click", () => {
+  const wish = input.value.trim();
+  if (!wish) return;
+  document.getElementById("bgm").play(); // ★ ここ追加！
+  section.style.opacity = "0";
+  setTimeout(() => (section.style.display = "none"), 1000);
+  character.src = "yumehara.png";
+  character.classList.add("show");
+  message.textContent = `"${wish}" いいね、けってーい！`;
+  message.classList.add("show");
 });
 
 class Petal {
