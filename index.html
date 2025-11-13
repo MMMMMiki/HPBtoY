@@ -128,6 +128,7 @@
 </style>
 </head>
 <body>
+<audio src="cigarette.mp3" autoplay loop></audio>
 <canvas id="canvas"></canvas>
 
 <div class="content">
@@ -141,26 +142,29 @@
   <button id="wish-button">送信</button>
 </div>
 
-  <script>
-/* --- DOM取得 (必ず最初に) --- */
+<script>
+
+button.addEventListener("click", () => {
+  const wish = input.value.trim();
+  if (!wish) return;
+  document.getElementById("bgm").play(); // ★ ここ追加！
+  section.style.opacity = "0";
+  setTimeout(() => (section.style.display = "none"), 1000);
+  character.src = "yumehara.png";
+  character.classList.add("show");
+  message.textContent = `"${wish}" いいね、けってーい！`;
+  message.classList.add("show");
+});
+  
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
-const input = document.getElementById("wish-input");
-const button = document.getElementById("wish-button");
-const section = document.getElementById("wish-section");
-const character = document.getElementById("character");
-const message = document.getElementById("cheer-message");
-const bgm = document.getElementById("bgm") || null; // 存在しなければ null
+canvas.width = innerWidth;
+canvas.height = innerHeight;
+window.addEventListener("resize", () => {
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+});
 
-/* --- canvasサイズ --- */
-function resizeCanvas(){
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-window.addEventListener("resize", resizeCanvas);
-resizeCanvas();
-
-/* --- Petal クラス (canvas/ctx は既に存在する前提) --- */
 class Petal {
   constructor() { this.reset(); }
   reset() {
@@ -198,34 +202,30 @@ class Petal {
 
 const petals = Array.from({ length: 25 }, () => new Petal());
 
-/* --- メインループ（既存 animate をそのまま） --- */
 function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   petals.forEach(p => { p.update(); p.draw(); });
   requestAnimationFrame(animate);
 }
-requestAnimationFrame(animate);
+animate();
 
-/* --- 抱負送信機能（イベントはここで一回だけ登録） --- */
+// 抱負送信機能
+const input = document.getElementById("wish-input");
+const button = document.getElementById("wish-button");
+const section = document.getElementById("wish-section");
+const character = document.getElementById("character");
+const message = document.getElementById("cheer-message");
+
 button.addEventListener("click", () => {
   const wish = input.value.trim();
   if (!wish) return;
-
-  // BGMが存在する場合は再生（存在チェック）
-  if (bgm && typeof bgm.play === "function") {
-    // 再生はブラウザ側のユーザー操作要件を満たすので問題ないはず
-    bgm.play().catch(()=>{ /* 再生失敗は無視 */ });
-  }
-
   section.style.opacity = "0";
   setTimeout(() => (section.style.display = "none"), 1000);
-  character.src = "yumehara.png"; // 必要ならパスを正しく
+  character.src = "yumehara.png"; // ←ここに好きな画像パス！
   character.classList.add("show");
   message.textContent = `"${wish}" いいね、けってーい！`;
   message.classList.add("show");
 });
 </script>
-
-
 </body>
 </html>
