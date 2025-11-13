@@ -144,6 +144,9 @@
 </div>
 
 <script>
+document.addEventListener("click", () => {
+  document.getElementById("bgm").play();
+}, { once: true });
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 canvas.width = innerWidth;
