@@ -236,34 +236,37 @@ class Sparkle {
   }
   draw() {
     ctx.globalAlpha = this.life;
-    ctx.fillStyle = this.color;
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fillStyle = this.color;
     ctx.fill();
     ctx.globalAlpha = 1;
   }
 }
 
+// sparkle生成
 function createSparkle(x, y) {
   for (let i = 0; i < 15; i++) {
     sparkles.push(new Sparkle(x, y));
   }
 }
 
+// クリック・タップに対応
 canvas.addEventListener("click", (e) => {
   createSparkle(e.clientX, e.clientY);
 });
-
 canvas.addEventListener("touchstart", (e) => {
-  const touch = e.touches[0];
-  createSparkle(touch.clientX, touch.clientY);
+  const t = e.touches[0];
+  createSparkle(t.clientX, t.clientY);
 });
 
-const oldAnimate = animate;
+// 既存のループにsparkle処理を統合
+const originalAnimate = animate;
 function animateWithSparkles() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   petals.forEach(p => { p.update(); p.draw(); });
 
+  // sparkle描画
   for (let i = sparkles.length - 1; i >= 0; i--) {
     const s = sparkles[i];
     s.update();
@@ -273,8 +276,8 @@ function animateWithSparkles() {
 
   requestAnimationFrame(animateWithSparkles);
 }
-cancelAnimationFrame(oldAnimate);
-animateWithSparkles();
+requestAnimationFrame(animateWithSparkles);
+
 
 </script>
 </body>
